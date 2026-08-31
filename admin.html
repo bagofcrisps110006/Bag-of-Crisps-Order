@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#641d19"><title>Bag of Crisps — Admin Portal</title>
+<style>
+:root{--red:#641d19;--cream:#fffaf0;--line:#e6d9c8;--soft:#fff2c9}*{box-sizing:border-box}body{margin:0;background:var(--cream);color:#241714;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:900px;margin:auto;padding:18px}.hero{background:var(--red);color:#fff;padding:18px;border-radius:18px;margin-bottom:14px}.hero h1{margin:0 0 4px;font-size:25px}.hero p{margin:0;opacity:.9}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin:12px 0;box-shadow:0 2px 10px #00000008}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.button,button{border:0;border-radius:11px;padding:11px 14px;font-weight:800;cursor:pointer}.primary{background:var(--red);color:#fff}.secondary{background:#f4e6cf;color:var(--red)}.danger{background:#8b2b20;color:#fff}.grid{display:grid;grid-template-columns:1.1fr 1fr 1fr 110px;gap:8px;align-items:end}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{font-size:13px;font-weight:700}input,select,textarea{width:100%;padding:10px;border:1px solid #cdbdaa;border-radius:10px;background:#fff;font:inherit}textarea{min-height:70px}.muted{font-size:12px;color:#75675f}.item{border:1px solid var(--line);border-radius:14px;padding:12px;margin:9px 0}.item-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.item-head h3{margin:0;color:var(--red)}.pill{font-size:11px;background:#f4e6cf;padding:5px 8px;border-radius:999px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px}.section-title h2{margin:0;color:var(--red);font-size:19px}.rowline{display:grid;grid-template-columns:1fr 110px 42px;gap:8px;align-items:end;margin:8px 0}.notice{background:var(--soft);border:1px solid #ead19a;padding:12px;border-radius:12px;font-size:13px}.hidden{display:none!important}@media(max-width:650px){.grid,.grid2{grid-template-columns:1fr}.rowline{grid-template-columns:1fr 100px 42px}.wrap{padding:10px}}
+</style></head><body><div class="wrap">
+<div class="hero"><h1>🍟 Bag of Crisps — Admin Portal</h1><p>Menu, prices, variants, extras & dips manage karo.</p></div>
+<div id="pinCard" class="card"><h2>Owner PIN</h2><input id="pin" type="password" inputmode="numeric" placeholder="Enter PIN"><button class="primary" style="margin-top:8px" id="unlock">Unlock</button><p class="muted">Default PIN: 2580. Is PIN ko sirf apne paas rakho.</p></div>
+<div id="app" class="hidden">
+<div class="notice"><b>Important:</b> Is free GitHub Pages setup mein browser se direct customer phones par changes automatically push nahi hote. Neeche <b>Download menu-data.js</b> dabao, phir us file ko GitHub mein purani <b>menu-data.js</b> se replace karke commit karo. Uske baad customers ko updated menu milega.</div>
+<div class="card"><div class="section-title"><h2>Menu Items</h2><div class="toolbar"><button class="primary" id="addItem">＋ Add Item</button><button class="secondary" id="download">⬇ Download menu-data.js</button></div></div><input id="filter" placeholder="Search item / category..." style="margin-top:10px"><div id="menuList"></div></div>
+<div class="card"><div class="section-title"><h2>Extras / Dips</h2><button class="primary" id="addExtra">＋ Add Extra / Dip</button></div><div id="extraList"></div></div>
+<div class="card"><h2>How to publish changes</h2><ol class="muted"><li>Edit/add items here.</li><li>Tap <b>Download menu-data.js</b>.</li><li>GitHub → repository → delete/replace the old <b>menu-data.js</b>.</li><li>Commit changes.</li><li>Customer website will then use the new menu/prices.</li></ol></div>
+</div></div>
+<script>
+const MENU_DATA=[
+["Momos",[
+["Steamed Momo",{"Veg":110,"Chicken":130,"Paneer":130},"Steamed, straight from the steamer"],
+["Fried Momo",{"Veg":120,"Chicken":140,"Paneer":140},"Deep-fried, hot & spicy"],
+["Pan-Fried Momo",{"Veg":120,"Chicken":140,"Paneer":140},"Tawa-tossed with masala"],
+["Crumbly Momo",{"Veg":140,"Chicken":150,"Paneer":150},"Crispy crumbs with a juicy surprise"],
+["Tandoori Momo",{"Chicken":160,"Paneer":160},"Smoky, spicy, straight from tandoor"],
+["Chilly Momo",{"Chicken":160,"Paneer":160},"Fiery, saucy and irresistible"],
+["Cheese Baked Momo",{"Chicken":170,"Paneer":170},"Ultimate cheese-loaded momos"],
+["Afghani Momo",{"Chicken":170,"Paneer":170},"Subtle spice, creamy delight"],
+["Makhni Momo",{"Chicken":180,"Paneer":180},"Buttery richness and bold flavors"]],"All momo varieties are served in 8 pieces per plate"],
+["Toasts & Wraps",[
+["Cheesy Toasties",{"Veg":100},"Five toasts with melted cheese"],
+["Corn & Cheese Toasties",{"Veg":110},"Golden toasts with corn & cheese"],
+["Veggie Toasties",{"Veg":120},"Crunchy, colorful and full of flavor"],
+["Spicy Paneer Wrap",{"Veg":120},"Soft paneer, fiery spices"],
+["Chicken Strips Wrap",{"Chicken":120},"Crispy chicken strips in a wrap"],
+["Grilled Chicken Wrap",{"Chicken":120},"Juicy grilled chicken with fresh flavors"],
+["Golden Fish Wrap",{"Fish":130},"Crispy fish with creamy tartar"]],"Add cheese slice in wraps +₹15"],
+["Salads",[
+["Veg Salad",{"Veg":120},"Fresh lettuce, tomatoes, cucumber, cabbage, olives & peppers"],
+["Chicken Salad",{"Chicken":150},"Fresh lettuce, crunchy veggies and juicy chicken"],
+["Chicken Tenders Salad",{"Chicken":160},"Fresh lettuce, crunchy veggies and chicken"]]],
+["Pasta",[
+["Alfredo Pasta",{"Veg":110,"Chicken":140},"Silky smooth Alfredo sauce"],
+["Arrabiata Pasta",{"Veg":110,"Chicken":140},"Heat and tangy goodness"],
+["Pink Sauce Pasta",{"Veg":110,"Chicken":140},"Creamy Alfredo + tangy tomato"],
+["Mac & Cheese",{"Veg":130,"Chicken":160},"Comfort pasta with premium cheese"]]],
+["Burgers",[
+["Aloo Tikki Burger",{"Veg":60},"Desi goodness in a bun"],
+["Loaded Veggie Burger",{"Veg":70},"Veggie patty with fresh veggies & sauces"],
+["Minced Chicken Burger",{"Chicken":80},"Seasoned minced chicken patty"],
+["Grilled Chicken Burger",{"Chicken":90},"Juicy grilled chicken with mint sauce"],
+["Chicken Shawarma Burger",{"Chicken":90},"Smoky shawarma chicken & creamy sauces"],
+["Crunchy Chicken Burger",{"Chicken":90},"Double strips, double crunch"],
+["Golden Fish Burger",{"Fish":90},"Golden fried fish with tartar & jalapeños"],
+["Spicy Paneer Burger",{"Paneer":90},"Bold paneer with a fiery kick"]]],
+["Drinks & Dessert",[
+["Choco Lava Cupcake",{"Veg":40}],["Fruit Curd (Blueberry/Strawberry/Mango)",{"Veg":60}],
+["Mocktails (Seasonal)",{"Veg":80},"Virgin/Ginger-Ale/Green Apple/Peach/Blueberry/Strawberry"],
+["Cold Coffee",{"Veg":90}],["Milkshake (Banana/Strawberry/Chocolate/Mango/Peanut-butter)",{"Veg":110}],
+["Smoothies (Blueberry/Strawberry/Mango/Peanut-butter)",{"Veg":120}],["Cold Drink",{"MRP":null},"M.R.P."]]],
+["Quick Bites",[
+["Veggie Noodles (Maggi Style)",{"Veg":50}],["Salsa Nachos",{"Veg":60}],["Potato Wedges",{"Veg":90}],
+["Veg Spring Rolls (5 pcs)",{"Veg":110}],["Chicken Spring Rolls (5 pcs)",{"Chicken":130}],["Veg Pizza Pocket (5 pcs)",{"Veg":130}],
+["Aloo Matar Samosi (6 pcs)",{"Veg":100}],["Cheesy Pizza Rolls (6 pcs)",{"Veg":140}],["Chicken Samosi (8 pcs)",{"Chicken":130}],
+["Chicken Nuggets (8 pcs)",{"Chicken":130}],["Chicken Cheesy Balls (8 pcs)",{"Chicken":130}],["Chicken Fries (15 pcs)",{"Chicken":130}],
+["Chicken Tenders (6 pcs)",{"Chicken":140}],["Fish Strips (6 pcs)",{"Fish":140}],["Crumbly Prawns (8 pcs)",{"Prawns":150}]]],
+["Fries",[
+["Salted Fries",{"Veg":70},"The OG fries"],["Peri-Peri Fries",{"Veg":80},"Fiery peri-peri kick"],
+["Chilly Lemon Fries",{"Veg":80},"Tangy and spicy"],["Veg Loaded Fries",{"Veg":130},"Colorful burst of flavor"],
+["Chicken Loaded Fries",{"Chicken":160},"Crispy fries with juicy chicken balls"]]],
+["Chinese / Korean",[
+["Veg Chowmein",{"Veg":140},"Wok-tossed perfection"],["Chicken Chowmein",{"Chicken":160},"Wok-tossed chicken chowmein"],
+["Chilli Potato",{"Veg":140},"Rich, sticky and flavorful"],["Honey Chilli Potato",{"Veg":160},"Sweetness and heat"],
+["Chilli Chicken Balls",{"Chicken":160},"Chicken balls in fiery chilli sauce"],["Chicken Korean Strips",{"Chicken":160},"Chicken breast strips in Korean sauce"],
+["Chilli Paneer",{"Paneer":170},"Paneer cubes in saucy goodness"]]],
+["Pav & Parotta",[
+["Vada Pav",{"Veg":50},"Crispy vada, soft pav & chutney"],["Chicken Galauti Kabab Bun",{"Chicken":80},"Soft kabab, spicy attitude"],
+["Chicken Galauti Kabab Roll",{"Chicken":100},"Melt-in-the-mouth galauti roll"],["Chilly Paneer Roll",{"Paneer":120},"Spicy chilly paneer roll"]]]
+];
+const EXTRAS=[{id:'extra-cheese',name:'Extra Cheese',price:15},{id:'dip',name:'Dip',price:20}];
+
+const PIN='2580';let data=[],extras=[];
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function money(v){return v==null||v===''?'MRP':'₹'+Number(v).toLocaleString('en-IN')}
+function load(){data=window.MENU_DATA||[];extras=window.EXTRAS||[{id:'extra-cheese',name:'Extra Cheese',price:15},{id:'dip',name:'Dip',price:20}];data=JSON.parse(JSON.stringify(data));extras=JSON.parse(JSON.stringify(extras));render()}
+function render(){const q=(document.getElementById('filter').value||'').toLowerCase();const el=document.getElementById('menuList');el.innerHTML='';data.forEach((sec,si)=>{const [cat,items,note]=sec;const shown=items.filter(x=>(cat+' '+JSON.stringify(x)).toLowerCase().includes(q));if(!shown.length)return;const box=document.createElement('div');box.innerHTML='<h3 style="color:#641d19;margin:18px 0 8px">'+esc(cat)+'</h3>';shown.forEach((x)=>{const oi=items.indexOf(x),[name,variants,desc]=x;const d=document.createElement('div');d.className='item';d.innerHTML='<div class="item-head"><h3>'+esc(name)+'</h3><span class="pill">'+Object.keys(variants||{}).length+' option(s)</span></div><div class="grid2" style="margin-top:9px"><label>Item name<input class="nm" value="'+esc(name)+'"></label><label>Description<input class="ds" value="'+esc(desc||'')+'"></label></div><div class="muted" style="margin-top:10px">Variants / prices</div><div class="vars"></div><div class="actions"><button class="secondary addVar">＋ Variant</button><button class="danger del">Delete item</button></div>';d.querySelector('.nm').onchange=e=>{x[0]=e.target.value.trim()||name;render()};d.querySelector('.ds').onchange=e=>{x[2]=e.target.value;saveMemory();};const vars=d.querySelector('.vars');Object.entries(variants||{}).forEach(([v,p])=>addVarRow(vars,si,oi,v,p));d.querySelector('.addVar').onclick=()=>{const v=prompt('Variant name (e.g. Veg / Chicken / Paneer / MRP)');if(!v)return;if((x[1]||{})[v]!==undefined){alert('Variant already exists.');return}(x[1]||{})[v]=null;saveMemory();render()};d.querySelector('.del').onclick=()=>{if(confirm('Is item ko delete karein?')){items.splice(oi,1);saveMemory();render()}};box.appendChild(d)});el.appendChild(box)});renderExtras()}
+function addVarRow(parent,si,oi,v,p){const r=document.createElement('div');r.className='rowline';r.innerHTML='<label>Variant<input value="'+esc(v)+'"></label><label>Price<input type="number" min="0" value="'+(p??'')+'" placeholder="MRP"></label><button class="danger" title="Delete">×</button>';const ins=r.querySelectorAll('input');ins[0].onchange=e=>{const nv=e.target.value.trim();if(!nv)return;if(nv!==v){const obj=data[si][1][oi][1];obj[nv]=obj[v];delete obj[v];saveMemory();render()}};ins[1].onchange=e=>{data[si][1][oi][1][v]=e.target.value===''?null:Number(e.target.value);saveMemory()};r.querySelector('button').onclick=()=>{const obj=data[si][1][oi][1];if(Object.keys(obj).length<=1){alert('At least one variant/price option rehna chahiye.');return}delete obj[v];saveMemory();render()};parent.appendChild(r)}
+function renderExtras(){const el=document.getElementById('extraList');el.innerHTML='';extras.forEach((e,i)=>{const r=document.createElement('div');r.className='rowline';r.innerHTML='<label>Extra / Dip<input value="'+esc(e.name)+'"></label><label>Price<input type="number" min="0" value="'+Number(e.price||0)+'"></label><button class="danger">×</button>';const ins=r.querySelectorAll('input');ins[0].onchange=x=>{e.name=x.target.value.trim();saveMemory()};ins[1].onchange=x=>{e.price=Number(x.target.value)||0;saveMemory()};r.querySelector('button').onclick=()=>{if(confirm('Extra delete karein?')){extras.splice(i,1);saveMemory();renderExtras()}};el.appendChild(r)})}
+function saveMemory(){localStorage.setItem('boc_admin_menu',JSON.stringify(data));localStorage.setItem('boc_admin_extras',JSON.stringify(extras))}
+function downloadFile(){let text='const MENU_DATA='+JSON.stringify(data)+';\nconst EXTRAS='+JSON.stringify(extras)+';\n';const blob=new Blob([text],{type:'text/javascript'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='menu-data.js';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function addItem(){const cat=prompt('Category (e.g. BURGERS)');if(!cat)return;const name=prompt('Item name');if(!name)return;const variant=prompt('Variant (e.g. Veg / Chicken). Blank allowed.')||'';const ps=prompt('Price (₹). MRP ke liye blank chhod sakti ho.');const price=ps===''?null:Number(ps);const sec=data.find(s=>s[0].toLowerCase()===cat.trim().toLowerCase());const item=[name.trim(),{},''];if(variant.trim())item[1][variant.trim()]=Number.isFinite(price)?price:null;else item[1].Veg=Number.isFinite(price)?price:null;if(sec)sec[1].push(item);else data.push([cat.trim(),[item]]);saveMemory();render();alert('New item add ho gaya ✅')}
+function addExtra(){const name=prompt('Extra / Dip name');if(!name)return;const ps=prompt('Price (₹)');if(ps===null)return;extras.push({id:'extra-'+Date.now(),name:name.trim(),price:Number(ps)||0});saveMemory();renderExtras()}
+document.getElementById('unlock').onclick=()=>{if(document.getElementById('pin').value===PIN){document.getElementById('pinCard').classList.add('hidden');document.getElementById('app').classList.remove('hidden');load()}else alert('Wrong PIN')};document.getElementById('filter').oninput=render;document.getElementById('addItem').onclick=addItem;document.getElementById('addExtra').onclick=addExtra;document.getElementById('download').onclick=downloadFile;
+</script>
+</body></html>
